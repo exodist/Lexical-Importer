@@ -12,15 +12,34 @@ our $VERSION = "0.000001";
 require XSLoader;
 XSLoader::load(__PACKAGE__, $VERSION);
 
+our %IMPORTED;
+
 sub import {
     my $class = shift;
-    $class->SUPER::import(\&set_symbol, @_);
+    my $from = shift;
+    my $into = caller;
+    $class->SUPER::import_into($from, $into, \&set_symbol, @_);
 }
 
 sub set_symbol {
-    my ($name, $ref, $sig) = @_;
-    __PACKAGE__->_import_lex_var("$sig$name" => $ref);
+    my ($name, $ref, %info) = @_;
+    push @{$IMPORTED{$info{into}}} => $name if $info{sig} eq '&';
+    __PACKAGE__->_import_lex_var("$info{sig}$name" => $ref);
 }
+
+sub do_unimport {
+    my $self = shift;
+
+    my $from = $self->from;
+    my $imported = $IMPORTED{$from} or $self->croak("'$from' does not have any lexical imports to remove");
+
+    my %allowed = map { $_ => 1 } @$imported;
+
+    my @args = @_ ? @_ : @$imported;
+
+    $self->_unimport_lex_sub($_) for @args;
+}
+
 
 1;
 
@@ -36,11 +55,56 @@ Lexical::Importer - Importer + Lexical subs/vars.
 
 =head1 DESCRIPTION
 
-FIXME
+This is a subclass of L<Importer> which will import all symbols as lexicals
+instead of package symbols.
+
+=head1 IMPORTANT NOTE
+
+This imports symbols into the currently compiling scope which is not
+necessarily the same as the package doing the importing.
+
+=head1 SYNOPSIS
+
+    # Define package versions first
+    sub foo { 'not lexical' }
+    sub bar { 'not lexical' }
+
+    say foo(); # prints 'not lexical';
+
+    {
+        use Lexical::Importer Foo => 'foo';
+        say foo(); # prints 'foo'
+    }
+
+    say foo(); # prints 'not lexical' again;
+
+    use Lexical::Importer Foo => 'foo';
+    say foo(); # prints 'foo'
+
+    say __PACKAGE__->foo(); # prints 'not lexical', method dispatch find package sub.
+
+    # Remove lexical subs
+    no Lexical::Importer;
+    say foo(); # prints 'not lexical' again;
+
+=head1 IMPORTER
+
+This package inherits from L<Importer> and works exactly the same apart from
+being lexical instead of modifying the symbol table.
+
+=head1 SEE ALSO
+
+L<Importer> - The importer module this package subclasses
+
+L<Lexical::Var> and L<Lexical::Sub> - The awesome modules Zefram wrote that
+make this possible. I<Note: Lexical::Importer ships with a forked copy of these>
+
+L<Lexical::Import> - A similar module, but it does not support everything
+L<Lexical::Importer> does.
 
 =head1 LEXICAL-VAR FORK
 
-The L<Lexical-Importer> module is bundled with a fork of the L<Lexical::Var> XS
+The L<Lexical::Importer> module is bundled with a fork of the L<Lexical::Var> XS
 code. This fork is necessary due to L<Lexical::Var> being broken on newer
 perls. The author of the original package is not accepting third party patches,
 and has not yet fixed the issues himself. Once a version of L<Lexical::Var>
