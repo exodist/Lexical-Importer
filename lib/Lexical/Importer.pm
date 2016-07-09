@@ -7,7 +7,7 @@ use Lexical::SealRequireHints 0.006;
 use Importer 0.013;
 use parent 'Importer';
 
-our $VERSION = "0.000001";
+our $VERSION = "0.000002";
 
 require XSLoader;
 XSLoader::load(__PACKAGE__, $VERSION);
@@ -65,9 +65,20 @@ necessarily the same as the package doing the importing.
 
 =head1 SYNOPSIS
 
+Say you have a module, C<Foo.pm>:
+
+    package Foo
+
+    use base 'Exporter';
+    our @EXPORT = qw/foo/;
+
+    sub foo { 'not lexical' }
+
+You want to import C<foo()> to use, but you also have your own C<foo()> method
+you do not want to squash in C<Your::Module.pm>
+
     # Define package versions first
     sub foo { 'not lexical' }
-    sub bar { 'not lexical' }
 
     say foo(); # prints 'not lexical';
 

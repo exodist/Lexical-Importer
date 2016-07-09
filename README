@@ -14,9 +14,20 @@ IMPORTANT NOTE
 
 SYNOPSIS
 
+    Say you have a module, Foo.pm:
+
+        package Foo
+    
+        use base 'Exporter';
+        our @EXPORT = qw/foo/;
+    
+        sub foo { 'not lexical' }
+
+    You want to import foo() to use, but you also have your own foo()
+    method you do not want to squash in Your::Module.pm
+
         # Define package versions first
         sub foo { 'not lexical' }
-        sub bar { 'not lexical' }
     
         say foo(); # prints 'not lexical';
     
