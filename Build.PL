@@ -5,7 +5,7 @@ use strict;
 use Module::Build;
 
 Module::Build->new(
-	module_name => "Lexical::Var",
+	module_name => "Lexical::Importer",
 	license => "perl",
 	configure_requires => {
 		"Module::Build" => 0,

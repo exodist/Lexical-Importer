@@ -189,10 +189,10 @@ static OP *THX_gen_const_identity_op(pTHX_ SV *sv)
  * %^H key names
  */
 
-#define KEYPREFIX "Lexical::Var/"
+#define KEYPREFIX "Lexical::Importer/"
 #define KEYPREFIXLEN (sizeof(KEYPREFIX)-1)
 
-#define LEXPADPREFIX "Lexical::Var::<LEX>"
+#define LEXPADPREFIX "Lexical::Importer::<LEX>"
 #define LEXPADPREFIXLEN (sizeof(LEXPADPREFIX)-1)
 
 #define CHAR_IDSTART 0x01
@@ -333,7 +333,7 @@ static OP *THX_ck_rv2xv(pTHX_ OP *o, char sigil, OP *(*nxck)(pTHX_ OP *o))
 			 */
 			hintref = HeVAL(he);
 			if(!SvROK(hintref))
-				croak("non-reference hint for Lexical::Var");
+				croak("non-reference hint for Lexical::Importer");
 			referent = SvREFCNT_inc(SvRV(hintref));
 			type = o->op_type;
 			flags = o->op_flags | (((U16)o->op_private) << 8);
@@ -619,7 +619,7 @@ static void THX_unimport(pTHX_ char base_sigil, char const *vari_word)
 	}
 }
 
-MODULE = Lexical::Var PACKAGE = Lexical::Var
+MODULE = Lexical::Importer PACKAGE = Lexical::Importer
 
 PROTOTYPES: DISABLE
 
@@ -645,7 +645,7 @@ OUTPUT:
 	RETVAL
 
 void
-import(SV *classname, ...)
+_import_lex_var(SV *classname, ...)
 PPCODE:
 	PERL_UNUSED_VAR(classname);
 	PUSHMARK(SP);
@@ -654,7 +654,7 @@ PPCODE:
 	SPAGAIN;
 
 void
-unimport(SV *classname, ...)
+_unimport_lex_var(SV *classname, ...)
 PPCODE:
 	PERL_UNUSED_VAR(classname);
 	PUSHMARK(SP);
@@ -662,7 +662,7 @@ PPCODE:
 	unimport('N', "variable");
 	SPAGAIN;
 
-MODULE = Lexical::Var PACKAGE = Lexical::Sub
+MODULE = Lexical::Importer PACKAGE = Lexical::Importer
 
 SV *
 _sub_for_compilation(SV *classname, SV *name)
@@ -673,7 +673,7 @@ OUTPUT:
 	RETVAL
 
 void
-import(SV *classname, ...)
+_import_lex_sub(SV *classname, ...)
 PPCODE:
 	PERL_UNUSED_VAR(classname);
 	PUSHMARK(SP);
@@ -682,7 +682,7 @@ PPCODE:
 	SPAGAIN;
 
 void
-unimport(SV *classname, ...)
+_unimport_lex_sub(SV *classname, ...)
 PPCODE:
 	PERL_UNUSED_VAR(classname);
 	PUSHMARK(SP);
