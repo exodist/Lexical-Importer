@@ -293,7 +293,7 @@ is_deeply \@values, [ 1 ];
 eval q{
 	use strict;
 	use Lexical::Var '$foo' => \(my$x=1);
-	use t::scalar_0;
+	use t::from_lex_vars::scalar_0;
 	push @values, $foo;
 };
 isnt $@, "";
@@ -303,7 +303,7 @@ is_deeply \@values, [];
 eval q{
 	no strict;
 	use Lexical::Var '$foo' => \(my$x=1);
-	use t::scalar_0n;
+	use t::from_lex_vars::scalar_0n;
 	push @values, $foo;
 };
 is $@, "";
@@ -313,7 +313,7 @@ is_deeply \@values, [ undef, 1 ];
 eval q{
 	use strict;
 	use Lexical::Var '$foo' => \(my$x=1);
-	use t::scalar_1;
+	use t::from_lex_vars::scalar_1;
 	push @values, $foo;
 };
 is $@, "";
@@ -323,7 +323,7 @@ is_deeply \@values, [ 1 ];
 eval q{
 	use strict;
 	use Lexical::Var '$foo' => \(my$x=1);
-	use t::scalar_2;
+	use t::from_lex_vars::scalar_2;
 	push @values, $foo;
 };
 is $@, "";
@@ -333,7 +333,7 @@ is_deeply \@values, [ 2, 1 ];
 eval q{
 	use strict;
 	use Lexical::Var '$foo' => \(my$x=1);
-	use t::scalar_3;
+	use t::from_lex_vars::scalar_3;
 	push @values, $foo;
 };
 is $@, "";
@@ -343,7 +343,7 @@ is_deeply \@values, [ 1 ];
 eval q{
 	use strict;
 	use Lexical::Var '$foo' => \(my$x=1);
-	use t::scalar_4;
+	use t::from_lex_vars::scalar_4;
 	push @values, $foo;
 };
 isnt $@, "";
@@ -353,7 +353,7 @@ is_deeply \@values, [];
 eval q{
 	no strict;
 	use Lexical::Var '$foo' => \(my$x=1);
-	use t::scalar_4n;
+	use t::from_lex_vars::scalar_4n;
 	push @values, $foo;
 };
 is $@, "";
