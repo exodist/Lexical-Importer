@@ -25,7 +25,7 @@ is_deeply \@values, [ "main" ];
 
 @values = ();
 eval q{
-	use Lexical::Var '&foo' => sub { 1 };
+	BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('&foo' => sub { 1 }) }
 	push @values, &foo;
 };
 is $@, "";
@@ -33,8 +33,8 @@ is_deeply \@values, [ 1 ];
 
 @values = ();
 eval q{
-	use Lexical::Var '&foo' => sub { 1 };
-	use Lexical::Var '&foo' => sub { 2 };
+	BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('&foo' => sub { 1 }) }
+	BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('&foo' => sub { 2 }) }
 	push @values, &foo;
 };
 is $@, "";
@@ -42,7 +42,7 @@ is_deeply \@values, [ 2 ];
 
 @values = ();
 eval q{
-	use Lexical::Var '&foo' => sub { 1 };
+	BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('&foo' => sub { 1 }) }
 	{
 		push @values, &foo;
 	}
@@ -52,7 +52,7 @@ is_deeply \@values, [ 1 ];
 
 @values = ();
 eval q{
-	use Lexical::Var '&foo' => sub { 1 };
+	BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('&foo' => sub { 1 }) }
 	{ ; }
 	push @values, &foo;
 };
@@ -62,7 +62,7 @@ is_deeply \@values, [ 1 ];
 @values = ();
 eval q{
 	{
-		use Lexical::Var '&foo' => sub { 1 };
+		BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('&foo' => sub { 1 }) }
 	}
 	push @values, &foo;
 };
@@ -71,9 +71,9 @@ is_deeply \@values, [ "main" ];
 
 @values = ();
 eval q{
-	use Lexical::Var '&foo' => sub { 1 };
+	BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('&foo' => sub { 1 }) }
 	{
-		use Lexical::Var '&foo' => sub { 2 };
+		BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('&foo' => sub { 2 }) }
 		push @values, &foo;
 	}
 };
@@ -82,9 +82,9 @@ is_deeply \@values, [ 2 ];
 
 @values = ();
 eval q{
-	use Lexical::Var '&foo' => sub { 1 };
+	BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('&foo' => sub { 1 }) }
 	{
-		use Lexical::Var '&foo' => sub { 2 };
+		BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('&foo' => sub { 2 }) }
 	}
 	push @values, &foo;
 };
@@ -93,9 +93,9 @@ is_deeply \@values, [ 1 ];
 
 @values = ();
 eval q{
-	use Lexical::Var '&foo' => sub { 1 };
+	BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('&foo' => sub { 1 }) }
 	{
-		use Lexical::Var '&foo' => sub { 2 };
+		BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('&foo' => sub { 2 }) }
 		push @values, &foo;
 	}
 	push @values, &foo;
@@ -105,7 +105,7 @@ is_deeply \@values, [ 2, 1 ];
 
 @values = ();
 eval q{
-	use Lexical::Var '&foo' => sub { 1 };
+	BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('&foo' => sub { 1 }) }
 	package wibble;
 	push @values, &foo;
 };
@@ -115,7 +115,7 @@ is_deeply \@values, [ 1 ];
 @values = ();
 eval q{
 	package wibble;
-	use Lexical::Var '&foo' => sub { 1 };
+	BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('&foo' => sub { 1 }) }
 	push @values, &foo;
 };
 is $@, "";
@@ -124,7 +124,7 @@ is_deeply \@values, [ 1 ];
 @values = ();
 eval q{
 	package wibble;
-	use Lexical::Var '&foo' => sub { 1 };
+	BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('&foo' => sub { 1 }) }
 	package main;
 	push @values, &foo;
 };
@@ -133,9 +133,9 @@ is_deeply \@values, [ 1 ];
 
 @values = ();
 eval q{
-	use Lexical::Var '&foo' => sub { 1 };
+	BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('&foo' => sub { 1 }) }
 	package wibble;
-	use Lexical::Var '&foo' => sub { 2 };
+	BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('&foo' => sub { 2 }) }
 	push @values, &foo;
 };
 is $@, "";
@@ -143,9 +143,9 @@ is_deeply \@values, [ 2 ];
 
 @values = ();
 eval q{
-	use Lexical::Var '&foo' => sub { 1 };
+	BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('&foo' => sub { 1 }) }
 	package wibble;
-	use Lexical::Var '&foo' => sub { 2 };
+	BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('&foo' => sub { 2 }) }
 	package main;
 	push @values, &foo;
 };
@@ -154,9 +154,9 @@ is_deeply \@values, [ 2 ];
 
 @values = ();
 eval q{
-	use Lexical::Var '&foo' => sub { 1 };
+	BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('&foo' => sub { 1 }) }
 	{
-		no Lexical::Var '&foo';
+		BEGIN { require Lexical::Importer; Lexical::Importer->_unimport_lex_var('&foo') }
 		push @values, &foo;
 	}
 };
@@ -165,9 +165,9 @@ is_deeply \@values, [ "main" ];
 
 @values = ();
 eval q{
-	use Lexical::Var '&foo' => sub { 1 };
+	BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('&foo' => sub { 1 }) }
 	{
-		no Lexical::Var '&foo';
+		BEGIN { require Lexical::Importer; Lexical::Importer->_unimport_lex_var('&foo') }
 	}
 	push @values, &foo;
 };
@@ -176,9 +176,9 @@ is_deeply \@values, [ 1 ];
 
 @values = ();
 eval q{
-	use Lexical::Var '&foo' => sub { 1 };
+	BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('&foo' => sub { 1 }) }
 	{
-		no Lexical::Var '&foo' => \&foo;
+		BEGIN { require Lexical::Importer; Lexical::Importer->_unimport_lex_var('&foo' => \&foo) }
 		push @values, &foo;
 	}
 };
@@ -187,9 +187,9 @@ is_deeply \@values, [ "main" ];
 
 @values = ();
 eval q{
-	use Lexical::Var '&foo' => sub { 1 };
+	BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('&foo' => sub { 1 }) }
 	{
-		no Lexical::Var '&foo' => \&foo;
+		BEGIN { require Lexical::Importer; Lexical::Importer->_unimport_lex_var('&foo' => \&foo) }
 	}
 	push @values, &foo;
 };
@@ -198,9 +198,9 @@ is_deeply \@values, [ 1 ];
 
 @values = ();
 eval q{
-	use Lexical::Var '&foo' => sub { 1 };
+	BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('&foo' => sub { 1 }) }
 	{
-		no Lexical::Var '&foo' => sub { 1 };
+		BEGIN { require Lexical::Importer; Lexical::Importer->_unimport_lex_var('&foo' => sub { 1 }) }
 		push @values, &foo;
 	}
 };
@@ -209,9 +209,9 @@ is_deeply \@values, [ 1 ];
 
 @values = ();
 eval q{
-	use Lexical::Var '&foo' => sub { 1 };
+	BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('&foo' => sub { 1 }) }
 	{
-		no Lexical::Var '&foo' => sub { 1 };
+		BEGIN { require Lexical::Importer; Lexical::Importer->_unimport_lex_var('&foo' => sub { 1 }) }
 	}
 	push @values, &foo;
 };
@@ -220,7 +220,7 @@ is_deeply \@values, [ 1 ];
 
 @values = ();
 eval q{
-	use Lexical::Var '&foo' => sub { 1 };
+	BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('&foo' => sub { 1 }) }
 	BEGIN { my $x = "foo\x{666}"; $x =~ /foo\p{Alnum}/; }
 	push @values, &foo;
 };
@@ -229,7 +229,7 @@ is_deeply \@values, [ 1 ];
 
 @values = ();
 eval q{
-	use Lexical::Var '&foo' => sub { 1 };
+	BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('&foo' => sub { 1 }) }
 	use t::from_lex_vars::code_0;
 	push @values, &foo;
 };
@@ -238,7 +238,7 @@ is_deeply \@values, [ "main", 1 ];
 
 @values = ();
 eval q{
-	use Lexical::Var '&foo' => sub { 1 };
+	BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('&foo' => sub { 1 }) }
 	use t::from_lex_vars::code_1;
 	push @values, &foo;
 };
@@ -247,7 +247,7 @@ is_deeply \@values, [ 1 ];
 
 @values = ();
 eval q{
-	use Lexical::Var '&foo' => sub { 1 };
+	BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('&foo' => sub { 1 }) }
 	use t::from_lex_vars::code_2;
 	push @values, &foo;
 };
@@ -256,7 +256,7 @@ is_deeply \@values, [ 2, 1 ];
 
 @values = ();
 eval q{
-	use Lexical::Var '&foo' => sub { 1 };
+	BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('&foo' => sub { 1 }) }
 	use t::from_lex_vars::code_3;
 	push @values, &foo;
 };
@@ -265,7 +265,7 @@ is_deeply \@values, [ 1 ];
 
 @values = ();
 eval q{
-	use Lexical::Var '&foo' => sub { 1 };
+	BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('&foo' => sub { 1 }) }
 	use t::from_lex_vars::code_4;
 	push @values, &foo;
 };
@@ -276,7 +276,7 @@ SKIP: { skip "no lexical propagation into string eval", 10 if "$]" < 5.009003;
 
 @values = ();
 eval q{
-	use Lexical::Var '&foo' => sub { 1 };
+	BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('&foo' => sub { 1 }) }
 	eval q{
 		push @values, &foo;
 	};
@@ -287,7 +287,7 @@ is_deeply \@values, [ 1 ];
 @values = ();
 eval q{
 	eval q{
-		use Lexical::Var '&foo' => sub { 1 };
+		BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('&foo' => sub { 1 }) }
 	};
 	push @values, &foo;
 };
@@ -296,9 +296,9 @@ is_deeply \@values, [ "main" ];
 
 @values = ();
 eval q{
-	use Lexical::Var '&foo' => sub { 1 };
+	BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('&foo' => sub { 1 }) }
 	eval q{
-		use Lexical::Var '&foo' => sub { 2 };
+		BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('&foo' => sub { 2 }) }
 		push @values, &foo;
 	};
 };
@@ -307,9 +307,9 @@ is_deeply \@values, [ 2 ];
 
 @values = ();
 eval q{
-	use Lexical::Var '&foo' => sub { 1 };
+	BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('&foo' => sub { 1 }) }
 	eval q{
-		use Lexical::Var '&foo' => sub { 2 };
+		BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('&foo' => sub { 2 }) }
 	};
 	push @values, &foo;
 };
@@ -318,9 +318,9 @@ is_deeply \@values, [ 1 ];
 
 @values = ();
 eval q{
-	use Lexical::Var '&foo' => sub { 1 };
+	BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('&foo' => sub { 1 }) }
 	eval q{
-		use Lexical::Var '&foo' => sub { 2 };
+		BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('&foo' => sub { 2 }) }
 		push @values, &foo;
 	};
 	push @values, &foo;

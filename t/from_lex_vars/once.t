@@ -5,22 +5,22 @@ use Test::More tests => 6;
 
 BEGIN { $SIG{__WARN__} = sub { die "WARNING: $_[0]" }; }
 
-use Lexical::Var '$scalar' => \1;
+BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('$scalar' => \1) }
 is_deeply $scalar, 1;
 
-use Lexical::Var '@array' => [];
+BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('@array' => []) }
 is_deeply \@array, [];
 
-use Lexical::Var '%hash' => {};
+BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('%hash' => {}) }
 is_deeply \%hash, {};
 
-use Lexical::Var '&code' => sub { 1 };
+BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('&code' => sub { 1 }) }
 is_deeply &code, 1;
 
-use Lexical::Var '*glob' => \*x;
+BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('*glob' => \*x) }
 is_deeply *glob, *x;
 
-use Lexical::Sub sub => sub { 1 };
+BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_sub(sub => sub { 1 }) }
 is_deeply &sub, 1;
 
 1;

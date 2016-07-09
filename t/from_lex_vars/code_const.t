@@ -11,13 +11,13 @@ plan tests => 6;
 BEGIN { $SIG{__WARN__} = sub { die "WARNING: $_[0]" }; }
 
 is eval q{
-	use Lexical::Var '&foo' => sub () { my $x=123 };
+	BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('&foo' => sub () { my $x=123 }) }
 	foo();
 }, 123;
 
 # test that non-constant foo() is not a const op
 eval q{
-	use Lexical::Var '&foo' => sub () { my $x=123 };
+	BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('&foo' => sub () { my $x=123 }) }
 	foo() = 456;
 	die;
 };
@@ -26,20 +26,20 @@ like $@, qr/\ACan't modify non-lvalue subroutine call /;
 # test that non-constant foo() does not participate in constant folding
 eval q{
 	die;
-	use Lexical::Var '&foo' => sub () { my $x=123 };
+	BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('&foo' => sub () { my $x=123 }) }
 	!foo() = 456;
 };
 like $@, qr/\ACan't modify not /;
 
 is eval q{
-	use Lexical::Var '&foo' => sub () { 123 };
+	BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('&foo' => sub () { 123 }) }
 	foo();
 }, 123;
 
 # test that constant foo() is a const op
 eval q{
 	die;
-	use Lexical::Var '&foo' => sub () { 123 };
+	BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('&foo' => sub () { 123 }) }
 	foo() = 456;
 };
 like $@, qr/\ACan't modify constant item /;
@@ -47,7 +47,7 @@ like $@, qr/\ACan't modify constant item /;
 # test that constant foo() participates in constant folding
 eval q{
 	die;
-	use Lexical::Var '&foo' => sub () { 123 };
+	BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('&foo' => sub () { 123 }) }
 	!foo() = 456;
 };
 like $@, qr/\ACan't modify constant item /;

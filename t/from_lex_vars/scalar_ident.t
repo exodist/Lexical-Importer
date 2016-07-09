@@ -25,7 +25,7 @@ foreach(
 	$oref = $_;
 	$aref = $bref = $cref = $dref = undef;
 	eval q{
-		use Lexical::Var '$foo' => $oref;
+		BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('$foo' => $oref) }
 		$aref = \$foo;
 		$bref = \$foo;
 		# A srefgen op applied to a const op will undergo

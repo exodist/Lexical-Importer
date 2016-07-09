@@ -1,2 +1,2 @@
-"Lexical::Var"->import('&t4' => sub{123});
+"Lexical::Importer"->_import_lex_var('&t4' => sub{123});
 1;

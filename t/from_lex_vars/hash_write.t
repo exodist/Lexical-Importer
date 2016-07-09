@@ -5,7 +5,7 @@ use Test::More tests => 4;
 
 BEGIN { $SIG{__WARN__} = sub { die "WARNING: $_[0]" }; }
 
-use Lexical::Var '%foo' => {};
+BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('%foo' => {}) }
 is_deeply \%foo, {};
 $foo{x} = "a";
 is_deeply \%foo, {x=>"a"};

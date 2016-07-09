@@ -1,2 +1,2 @@
-use Lexical::Var '&foo' => sub { 2 };
+BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('&foo' => sub { 2 }) }
 1;

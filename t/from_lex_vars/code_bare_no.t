@@ -23,7 +23,7 @@ our @values;
 { local $TODO = "bareword ref without parens works funny";
 @values = ();
 eval q{
-	use Lexical::Var '&foo' => sub () { 1 };
+	BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('&foo' => sub () { 1 }) }
 	push @values, foo;
 };
 like $@, qr/\Acan't reference lexical subroutine without \& sigil/;
@@ -32,7 +32,7 @@ is_deeply \@values, [];
 
 @values = ();
 eval q{
-	use Lexical::Var '&foo' => sub () { 1 };
+	BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('&foo' => sub () { 1 }) }
 	push @values, foo();
 };
 like $@, qr/\Acan't reference lexical subroutine without \& sigil/;
@@ -41,7 +41,7 @@ is_deeply \@values, [];
 { local $TODO = "bareword ref without parens works funny";
 @values = ();
 eval q{
-	use Lexical::Var '&foo' => sub ($) { 1+$_[0] };
+	BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('&foo' => sub ($) { 1+$_[0] }) }
 	push @values, foo 10;
 };
 like $@, qr/\Acan't reference lexical subroutine without \& sigil/;
@@ -50,7 +50,7 @@ is_deeply \@values, [];
 
 @values = ();
 eval q{
-	use Lexical::Var '&foo' => sub ($) { 1+$_[0] };
+	BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('&foo' => sub ($) { 1+$_[0] }) }
 	push @values, foo(10);
 };
 like $@, qr/\Acan't reference lexical subroutine without \& sigil/;
@@ -59,7 +59,7 @@ is_deeply \@values, [];
 { local $TODO = "constant subs work funny";
 @values = ();
 eval q{
-	use Lexical::Var '&foo' => sub () { 1 };
+	BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('&foo' => sub () { 1 }) }
 	push @values, bar;
 };
 like $@, qr/\Acan't reference lexical subroutine without \& sigil/;
@@ -67,7 +67,7 @@ is_deeply \@values, [];
 
 @values = ();
 eval q{
-	use Lexical::Var '&foo' => sub () { 1 };
+	BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('&foo' => sub () { 1 }) }
 	push @values, bar();
 };
 like $@, qr/\Acan't reference lexical subroutine without \& sigil/;

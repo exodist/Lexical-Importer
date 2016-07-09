@@ -5,126 +5,126 @@ use Test::More tests => 53;
 
 BEGIN { $SIG{__WARN__} = sub { die "WARNING: $_[0]" }; }
 
-require_ok "Lexical::Var";
+require_ok "Lexical::Importer";
 
-eval q{ Lexical::Var->import(); };
-like $@, qr/\ALexical::Var does no default importation/;
-eval q{ Lexical::Var->unimport(); };
-like $@, qr/\ALexical::Var does no default unimportation/;
-eval q{ Lexical::Var->import('foo'); };
-like $@, qr/\Aimport list for Lexical::Var must alternate /;
-eval q{ Lexical::Var->import('$foo', \1); };
+eval q{ Lexical::Importer->_import_lex_var(); };
+like $@, qr/\ALexical::Importer does no default importation/;
+eval q{ Lexical::Importer->_unimport_lex_var(); };
+like $@, qr/\ALexical::Importer does no default unimportation/;
+eval q{ Lexical::Importer->_import_lex_var('foo'); };
+like $@, qr/\Aimport list for Lexical::Importer must alternate /;
+eval q{ Lexical::Importer->_import_lex_var('$foo', \1); };
 like $@, qr/\Acan't set up lexical variable outside compilation/;
-eval q{ Lexical::Var->unimport('$foo'); };
+eval q{ Lexical::Importer->_unimport_lex_var('$foo'); };
 like $@, qr/\Acan't set up lexical variable outside compilation/;
 
-eval q{ use Lexical::Var; };
-like $@, qr/\ALexical::Var does no default importation/;
-eval q{ no Lexical::Var; };
-like $@, qr/\ALexical::Var does no default unimportation/;
+eval q{ BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var() } };
+like $@, qr/\ALexical::Importer does no default importation/;
+eval q{ BEGIN { require Lexical::Importer; Lexical::Importer->_unimport_lex_var() } };
+like $@, qr/\ALexical::Importer does no default unimportation/;
 
-eval q{ use Lexical::Var 'foo'; };
-like $@, qr/\Aimport list for Lexical::Var must alternate /;
+eval q{ BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('foo') } };
+like $@, qr/\Aimport list for Lexical::Importer must alternate /;
 
-eval q{ use Lexical::Var undef, \1; };
+eval q{ BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var(undef, \1) } };
 like $@, qr/\Avariable name is not a string/;
-eval q{ use Lexical::Var \1, sub{}; };
+eval q{ BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var(\1, sub{}) } };
 like $@, qr/\Avariable name is not a string/;
-eval q{ use Lexical::Var undef, "wibble"; };
+eval q{ BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var(undef, "wibble") } };
 like $@, qr/\Avariable name is not a string/;
 
-eval q{ use Lexical::Var 'foo', \1; };
+eval q{ BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('foo', \1) } };
 like $@, qr/\Amalformed variable name/;
-eval q{ use Lexical::Var '$', \1; };
+eval q{ BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('$', \1) } };
 like $@, qr/\Amalformed variable name/;
-eval q{ use Lexical::Var '$foo(bar', \1; };
+eval q{ BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('$foo(bar', \1) } };
 like $@, qr/\Amalformed variable name/;
-eval q{ use Lexical::Var '$1foo', \1; };
+eval q{ BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('$1foo', \1) } };
 like $@, qr/\Amalformed variable name/;
-eval q{ use Lexical::Var '$foo\x{e9}bar', \1; };
+eval q{ BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('$foo\x{e9}bar', \1) } };
 like $@, qr/\Amalformed variable name/;
-eval q{ use Lexical::Var '$foo::bar', \1; };
+eval q{ BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('$foo::bar', \1) } };
 like $@, qr/\Amalformed variable name/;
-eval q{ use Lexical::Var '!foo', \1; };
+eval q{ BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('!foo', \1) } };
 like $@, qr/\Amalformed variable name/;
-eval q{ use Lexical::Var 'foo', "wibble"; };
+eval q{ BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('foo', "wibble") } };
 like $@, qr/\Amalformed variable name/;
 
-eval q{ use Lexical::Var '$foo', "wibble"; };
+eval q{ BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('$foo', "wibble") } };
 like $@, qr/\Avariable is not scalar reference/;
 
-eval q{ no Lexical::Var undef, \1; };
+eval q{ BEGIN { require Lexical::Importer; Lexical::Importer->_unimport_lex_var(undef, \1) } };
 like $@, qr/\Avariable name is not a string/;
-eval q{ no Lexical::Var \1, sub{}; };
+eval q{ BEGIN { require Lexical::Importer; Lexical::Importer->_unimport_lex_var(\1, sub{}) } };
 like $@, qr/\Avariable name is not a string/;
-eval q{ no Lexical::Var undef, "wibble"; };
+eval q{ BEGIN { require Lexical::Importer; Lexical::Importer->_unimport_lex_var(undef, "wibble") } };
 like $@, qr/\Avariable name is not a string/;
 
-eval q{ no Lexical::Var 'foo', \1; };
+eval q{ BEGIN { require Lexical::Importer; Lexical::Importer->_unimport_lex_var('foo', \1) } };
 like $@, qr/\Amalformed variable name/;
-eval q{ no Lexical::Var '$', \1; };
+eval q{ BEGIN { require Lexical::Importer; Lexical::Importer->_unimport_lex_var('$', \1) } };
 like $@, qr/\Amalformed variable name/;
-eval q{ no Lexical::Var '$foo(bar', \1; };
+eval q{ BEGIN { require Lexical::Importer; Lexical::Importer->_unimport_lex_var('$foo(bar', \1) } };
 like $@, qr/\Amalformed variable name/;
-eval q{ no Lexical::Var '$foo::bar', \1; };
+eval q{ BEGIN { require Lexical::Importer; Lexical::Importer->_unimport_lex_var('$foo::bar', \1) } };
 like $@, qr/\Amalformed variable name/;
-eval q{ no Lexical::Var '!foo', \1; };
+eval q{ BEGIN { require Lexical::Importer; Lexical::Importer->_unimport_lex_var('!foo', \1) } };
 like $@, qr/\Amalformed variable name/;
 
-require_ok "Lexical::Sub";
+require_ok "Lexical::Importer";
 
-eval q{ Lexical::Sub->import(); };
-like $@, qr/\ALexical::Sub does no default importation/;
-eval q{ Lexical::Sub->unimport(); };
-like $@, qr/\ALexical::Sub does no default unimportation/;
-eval q{ Lexical::Sub->import('foo'); };
-like $@, qr/\Aimport list for Lexical::Sub must alternate /;
+eval q{ Lexical::Importer->_import_lex_sub(); };
+like $@, qr/\ALexical::Importer does no default importation/;
+eval q{ Lexical::Importer->_unimport_lex_sub(); };
+like $@, qr/\ALexical::Importer does no default unimportation/;
+eval q{ Lexical::Importer->_import_lex_sub('foo'); };
+like $@, qr/\Aimport list for Lexical::Importer must alternate /;
 
-eval q{ use Lexical::Sub; };
-like $@, qr/\ALexical::Sub does no default importation/;
-eval q{ no Lexical::Sub; };
-like $@, qr/\ALexical::Sub does no default unimportation/;
+eval q{ BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_sub() } };
+like $@, qr/\ALexical::Importer does no default importation/;
+eval q{ BEGIN { require Lexical::Importer; Lexical::Importer->_unimport_lex_sub() } };
+like $@, qr/\ALexical::Importer does no default unimportation/;
 
-eval q{ use Lexical::Sub 'foo'; };
-like $@, qr/\Aimport list for Lexical::Sub must alternate /;
+eval q{ BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_sub('foo') } };
+like $@, qr/\Aimport list for Lexical::Importer must alternate /;
 
-eval q{ use Lexical::Sub undef, sub{}; };
+eval q{ BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_sub(undef, sub{}) } };
 like $@, qr/\Asubroutine name is not a string/;
-eval q{ use Lexical::Sub sub{}, \1; };
+eval q{ BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_sub(sub{}, \1) } };
 like $@, qr/\Asubroutine name is not a string/;
-eval q{ use Lexical::Sub undef, "wibble"; };
+eval q{ BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_sub(undef, "wibble") } };
 like $@, qr/\Asubroutine name is not a string/;
 
-eval q{ use Lexical::Sub '$', sub{}; };
+eval q{ BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_sub('$', sub{}) } };
 like $@, qr/\Amalformed subroutine name/;
-eval q{ use Lexical::Sub 'foo(bar', sub{}; };
+eval q{ BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_sub('foo(bar', sub{}) } };
 like $@, qr/\Amalformed subroutine name/;
-eval q{ use Lexical::Sub '1foo', sub{}; };
+eval q{ BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_sub('1foo', sub{}) } };
 like $@, qr/\Amalformed subroutine name/;
-eval q{ use Lexical::Sub 'foo\x{e9}bar', sub{}; };
+eval q{ BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_sub('foo\x{e9}bar', sub{}) } };
 like $@, qr/\Amalformed subroutine name/;
-eval q{ use Lexical::Sub 'foo::bar', sub{}; };
+eval q{ BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_sub('foo::bar', sub{}) } };
 like $@, qr/\Amalformed subroutine name/;
-eval q{ use Lexical::Sub '!foo', sub{}; };
+eval q{ BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_sub('!foo', sub{}) } };
 like $@, qr/\Amalformed subroutine name/;
 
-eval q{ use Lexical::Sub 'foo', "wibble"; };
+eval q{ BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_sub('foo', "wibble") } };
 like $@, qr/\Asubroutine is not code reference/;
 
-eval q{ no Lexical::Sub undef, sub{}; };
+eval q{ BEGIN { require Lexical::Importer; Lexical::Importer->_unimport_lex_sub(undef, sub{}) } };
 like $@, qr/\Asubroutine name is not a string/;
-eval q{ no Lexical::Sub sub{}, \1; };
+eval q{ BEGIN { require Lexical::Importer; Lexical::Importer->_unimport_lex_sub(sub{}, \1) } };
 like $@, qr/\Asubroutine name is not a string/;
-eval q{ no Lexical::Sub undef, "wibble"; };
+eval q{ BEGIN { require Lexical::Importer; Lexical::Importer->_unimport_lex_sub(undef, "wibble") } };
 like $@, qr/\Asubroutine name is not a string/;
 
-eval q{ no Lexical::Sub '$', sub{}; };
+eval q{ BEGIN { require Lexical::Importer; Lexical::Importer->_unimport_lex_sub('$', sub{}) } };
 like $@, qr/\Amalformed subroutine name/;
-eval q{ no Lexical::Sub 'foo(bar', sub{}; };
+eval q{ BEGIN { require Lexical::Importer; Lexical::Importer->_unimport_lex_sub('foo(bar', sub{}) } };
 like $@, qr/\Amalformed subroutine name/;
-eval q{ no Lexical::Sub 'foo::bar', sub{}; };
+eval q{ BEGIN { require Lexical::Importer; Lexical::Importer->_unimport_lex_sub('foo::bar', sub{}) } };
 like $@, qr/\Amalformed subroutine name/;
-eval q{ no Lexical::Sub '!foo', sub{}; };
+eval q{ BEGIN { require Lexical::Importer; Lexical::Importer->_unimport_lex_sub('!foo', sub{}) } };
 like $@, qr/\Amalformed subroutine name/;
 
 1;

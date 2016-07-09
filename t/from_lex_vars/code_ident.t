@@ -17,7 +17,7 @@ foreach(
 	$oref = $_;
 	$aref = $bref = undef;
 	eval q{
-		use Lexical::Var '&foo' => $oref;
+		BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('&foo' => $oref) }
 		$aref = \&foo;
 		$bref = \&foo;
 	};

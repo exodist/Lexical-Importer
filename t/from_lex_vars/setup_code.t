@@ -5,7 +5,7 @@ use Test::More tests => 12;
 
 BEGIN { $SIG{__WARN__} = sub { die "WARNING: $_[0]" }; }
 
-require Lexical::Var;
+require Lexical::Importer;
 
 sub test_case($) {
 	my $result = eval($_[0]);
@@ -18,19 +18,19 @@ sub test_case($) {
 }
 
 test_case q{
-	use Lexical::Var '&t1' => sub{123};
+	BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('&t1' => sub{123}) }
 	&t1;
 };
 
 test_case q{
-	BEGIN { "Lexical::Var"->import('&t2' => sub{123}); }
+	BEGIN { "Lexical::Importer"->_import_lex_var('&t2' => sub{123}); }
 	&t2;
 };
 
 test_case q{
 	BEGIN {
-		require Lexical::Sub;
-		"Lexical::Var"->import('&t3' => sub{123});
+		require Lexical::Importer;
+		"Lexical::Importer"->_import_lex_var('&t3' => sub{123});
 	}
 	&t3;
 };
@@ -56,7 +56,7 @@ test_case q{
 };
 
 test_case q{
-	BEGIN { sub{ "Lexical::Var"->import('&t8' => sub{123}); }->(); }
+	BEGIN { sub{ "Lexical::Importer"->_import_lex_var('&t8' => sub{123}); }->(); }
 	&t8;
 };
 
@@ -64,13 +64,13 @@ test_case q{
 	BEGIN {
 		sub {
 			my $n = 123;
-			sub{ "Lexical::Var"->import('&t9' => sub{$n}); };
+			sub{ "Lexical::Importer"->_import_lex_var('&t9' => sub{$n}); };
 		}->()->();
 	}
 	&t9;
 };
 
-sub ts10() { "Lexical::Var"->import('&t10' => sub{123}); }
+sub ts10() { "Lexical::Importer"->_import_lex_var('&t10' => sub{123}); }
 test_case q{
 	BEGIN { ts10(); }
 	&t10;
@@ -79,14 +79,14 @@ test_case q{
 test_case q{
 	BEGIN {
 		eval q{"x"}; die $@ if $@;
-		"Lexical::Var"->import('&t11' => sub{123});
+		"Lexical::Importer"->_import_lex_var('&t11' => sub{123});
 	}
 	&t11;
 };
 
 test_case q{
 	BEGIN {
-		eval q{ "Lexical::Var"->import('&t12' => sub{123}); };
+		eval q{ "Lexical::Importer"->_import_lex_var('&t12' => sub{123}); };
 		die $@ if $@;
 	}
 	&t12;

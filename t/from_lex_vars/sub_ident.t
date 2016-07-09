@@ -17,7 +17,7 @@ foreach(
 	$oref = $_;
 	$aref = $bref = undef;
 	eval q{
-		use Lexical::Sub foo => $oref;
+		BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_sub(foo => $oref) }
 		$aref = \&foo;
 		$bref = \&foo;
 	};

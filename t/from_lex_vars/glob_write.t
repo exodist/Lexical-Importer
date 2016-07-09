@@ -7,7 +7,7 @@ BEGIN { $SIG{__WARN__} = sub { die "WARNING: $_[0]" }; }
 
 my($x, $y);
 our @wibble;
-use Lexical::Var '*foo' => \*main::wibble;
+BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('*foo' => \*main::wibble) }
 ok *foo{SCALAR} != \$x;
 ok *foo{SCALAR} != \$y;
 *foo = \$x;

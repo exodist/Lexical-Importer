@@ -20,7 +20,7 @@ our @values;
 @values = ();
 eval q{
 	use strict;
-	use Lexical::Var '%foo' => { qw(a A b B c C) };
+	BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('%foo' => { qw(a A b B c C) }) }
 	push @values, $foo{b};
 };
 is $@, "";
@@ -29,7 +29,7 @@ is_deeply \@values, [ "B" ];
 @values = ();
 eval q{
 	use strict;
-	use Lexical::Var '%foo' => { qw(a A b B c C) };
+	BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('%foo' => { qw(a A b B c C) }) }
 	my $i = "b";
 	push @values, $foo{$i};
 };
@@ -39,7 +39,7 @@ is_deeply \@values, [ "B" ];
 @values = ();
 eval q{
 	use strict;
-	use Lexical::Var '%foo' => { qw(a A b B c C) };
+	BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('%foo' => { qw(a A b B c C) }) }
 	push @values, @foo{qw(b c a)};
 };
 is $@, "";
@@ -48,7 +48,7 @@ is_deeply \@values, [ qw(B C A) ];
 @values = ();
 eval q{
 	use strict;
-	use Lexical::Var '%foo' => { qw(a A b B c C) };
+	BEGIN { require Lexical::Importer; Lexical::Importer->_import_lex_var('%foo' => { qw(a A b B c C) }) }
 	my @i = qw(b c a);
 	push @values, @foo{@i};
 };
