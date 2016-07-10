@@ -7,7 +7,7 @@ use Lexical::SealRequireHints 0.006;
 use Importer 0.013;
 use parent 'Importer';
 
-our $VERSION = "0.000002";
+our $VERSION = "0.000003";
 
 require XSLoader;
 XSLoader::load(__PACKAGE__, $VERSION);
