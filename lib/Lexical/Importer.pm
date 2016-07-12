@@ -72,7 +72,7 @@ Say you have a module, C<Foo.pm>:
     use base 'Exporter';
     our @EXPORT = qw/foo/;
 
-    sub foo { 'not lexical' }
+    sub foo { 'foo' }
 
 You want to import C<foo()> to use, but you also have your own C<foo()> method
 you do not want to squash in C<Your::Module.pm>
