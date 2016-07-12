@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 
-use 5.008001;
+use 5.012000;
 
 use ExtUtils::MakeMaker;
 
@@ -14,14 +14,18 @@ my %WriteMakefileArgs = (
   },
   "DISTNAME" => "Lexical-Importer",
   "LICENSE" => "perl",
-  "MIN_PERL_VERSION" => "5.008001",
+  "MIN_PERL_VERSION" => "5.012000",
   "NAME" => "Lexical::Importer",
   "PREREQ_PM" => {
     "Importer" => "0.013",
     "Lexical::SealRequireHints" => "0.006",
-    "XSLoader" => 0
+    "XSLoader" => 0,
+    "parent" => 0
   },
-  "VERSION" => "0.000001",
+  "TEST_REQUIRES" => {
+    "Test2::Suite" => "0.000050"
+  },
+  "VERSION" => "0.000004",
   "test" => {
     "TESTS" => "t/*.t t/from_lex_vars/*.t"
   }
@@ -31,7 +35,9 @@ my %WriteMakefileArgs = (
 my %FallbackPrereqs = (
   "Importer" => "0.013",
   "Lexical::SealRequireHints" => "0.006",
-  "XSLoader" => 0
+  "Test2::Suite" => "0.000050",
+  "XSLoader" => 0,
+  "parent" => 0
 );
 
 

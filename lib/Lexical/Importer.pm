@@ -1,5 +1,5 @@
 package Lexical::Importer;
-use 5.008;
+use 5.012;
 use warnings;
 use strict;
 
@@ -7,7 +7,7 @@ use Lexical::SealRequireHints 0.006;
 use Importer 0.013;
 use parent 'Importer';
 
-our $VERSION = "0.000003";
+our $VERSION = "0.000004";
 
 require XSLoader;
 XSLoader::load(__PACKAGE__, $VERSION);

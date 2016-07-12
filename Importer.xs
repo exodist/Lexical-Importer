@@ -471,8 +471,12 @@ static void THX_setup_pad(pTHX_ CV *compcv, char const *name)
 	PADNAMELIST *padname = PadlistNAMES(padlist);
 	PAD *padvar = PadlistARRAY(padlist)[1];
 	PADOFFSET ouroffset;
+#ifdef newPADNAMEpvn
 	PADNAME *ourname;
 	SV *ourvar;
+#else
+	SV *ourname, *ourvar;
+#endif
 	HV *stash;
 	ourvar = *av_fetch(padvar, PadMAX(padvar) + 1, 1);
 	SvPADMY_on(ourvar);
