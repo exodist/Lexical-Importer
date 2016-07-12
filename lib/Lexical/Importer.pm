@@ -138,7 +138,7 @@ under the same terms as Perl itself.
 =head1 SOURCE
 
 The source code repository for Lexical-Importer can be found at
-F<http://github.com/FIXME/>.
+F<https://github.com/exodist/Lexical-Importer>.
 
 =head1 MAINTAINERS
 

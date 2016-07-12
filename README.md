@@ -87,7 +87,7 @@ under the same terms as Perl itself.
 # SOURCE
 
 The source code repository for Lexical-Importer can be found at
-`http://github.com/FIXME/`.
+`https://github.com/exodist/Lexical-Importer`.
 
 # MAINTAINERS
 
